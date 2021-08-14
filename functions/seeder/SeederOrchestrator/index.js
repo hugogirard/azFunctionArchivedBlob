@@ -4,30 +4,33 @@ const { v4: uuidv4 } = require('uuid');
 //const _blobServiceClient = new BlobServiceClient();
 
 module.exports = df.orchestrator(function* (context) {
-    const outputs = [];
+    const outputs = {};
 
-    const input = context.df.getInput();
+    const payload = context.df.getInput();
+    const containerName = payload.containerName;
+    
+    const tasks = [];
+    for (let index = 0; index < payload.nbrDocuments; index++) {
 
-    const iterations = input['nbrDocuments'];
+        const filename = `${uuidv4()}.pdf`;      
+        const input = {
+            containerName: containerName,
+            filename: filename
+        };
 
-    const filename = `${uuidv4()}.pdf`;
+        tasks.push(context.df.callActivity('UploadInvoices',input));
+    }
 
-    // for (let index = 0; index < iterations; index++) {
-    //     const filename = `${uuidv4()}.pdf`;
-    //     outputs.push(filename);
-    // }
+    const results = yield context.df.Task.all(tasks);
+    context.log.info(results);
 
-    input['filename'] = filename;
-
-    yield context.df.callActivity('UploadInvoices');
-
-    outputs.push(JSON.stringify(input));
-
-
-
-    // outputs.push(yield context.df.callActivity("UploadInvoices", "Tokyo"));
-    // outputs.push(yield context.df.callActivity("UploadInvoices", "Seattle"));
-    // outputs.push(yield context.df.callActivity("UploadInvoices", "London"));
+    const documentsInError = results.filter(r => r.isSuccess === false);
+    const successDocument = results.filter(r => r.isSuccess).length;
+    
+    outputs.totalDocumentProcess = payload.nbrDocuments;
+    outputs.totalSuccessDocument = successDocument;
+    outputs.totalErrorDocument = documentsInError.lenght;
+    outputs.documentInErrors = documentsInError;
 
     return outputs;
 });

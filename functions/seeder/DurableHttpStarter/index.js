@@ -26,12 +26,14 @@ module.exports = async function (context, req) {
         const containerClient = blobServiceClient.getContainerClient(containerName);
         
         const containerResponse = await containerClient.createIfNotExists();
-    
-        if (!containerResponse.succeeded){
+        
+        if (!containerResponse.succeededn && containerResponse.errorCode != 'ContainerAlreadyExists'){
             context.log.error(`Cannot create container ${containerName}`);
             throw new Exception('Cannot create container');
         }
         
+        req.body.containerName = containerName; 
+
         const client = df.getClient(context);
         const instanceId = await client.startNew('SeederOrchestrator', undefined, req.body);
     
