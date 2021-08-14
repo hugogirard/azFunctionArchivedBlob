@@ -4,6 +4,13 @@
       "name": "name",
       "type": "activityTrigger",
       "direction": "in"
-    }
+    },
+    {
+      "name": "outputBlob",
+      "type": "blob",
+      "path": "{containerName}/{filename}",
+      "direction": "out",
+      "connection": "AzureWebJobsStorage"
+    }    
   ]
 }
