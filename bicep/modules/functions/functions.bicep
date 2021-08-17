@@ -27,7 +27,7 @@ resource sdHosting 'Microsoft.Web/serverfarms@2021-01-15' = {
 resource fnSeeder 'Microsoft.Web/sites@2021-01-15' = {
   name: seederFunctionAppName
   location: location
-  kind: 'funtionapp'
+  kind: 'functionapp'
   properties: {
     serverFarmId: sdHosting.id
     siteConfig: {
