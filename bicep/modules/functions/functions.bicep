@@ -85,3 +85,6 @@ resource insight 'Microsoft.Insights/components@2020-02-02' = {
     WorkspaceResourceId: logAnalytics.id
   }
 }
+
+
+output functionSeederName string = fnSeeder.name

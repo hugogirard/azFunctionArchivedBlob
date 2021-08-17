@@ -9,3 +9,5 @@ module function 'modules/functions/functions.bicep' = {
     suffix: suffix
   }
 }
+
+output functionSeederName string = function.outputs.functionSeederName
