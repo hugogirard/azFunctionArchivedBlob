@@ -1,0 +1,35 @@
+name: Deploy Azure Function Sample
+
+on:
+ push:
+ workflow_dispatch:
+
+env:
+  LOCATION: canadacentral
+  RESOURCE_GROUP_NAME: 'azure-function-blob'
+
+jobs:
+  create-azure-resources:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group
+        run: |
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.LOCATION }}
+
+      - name: Create Azure Resouces
+        uses: azure/arm-deploy@v1
+        id: createAzResources
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: bicep/main.bicep
+          parameters: location=${{ env.LOCATION }}        

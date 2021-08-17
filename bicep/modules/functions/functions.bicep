@@ -57,10 +57,22 @@ resource fnSeeder 'Microsoft.Web/sites@2021-01-15' = {
         }      
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};AccountKey=${}'
-        }                    
+          value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strSeeder.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strSeeder.listKeys().keys[0].value}'
+        }                            
       ]
     }
+  }
+}
+
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
+  name: 'log-wrk-${suffix}'
+  location: location
+  properties: {
+    retentionInDays: 30
   }
 }
 
@@ -70,5 +82,6 @@ resource insight 'Microsoft.Insights/components@2020-02-02' = {
   kind: 'web'
   properties: {
     Application_Type: 'web'
+    WorkspaceResourceId: logAnalytics.id
   }
 }
