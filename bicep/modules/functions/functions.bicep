@@ -58,11 +58,11 @@ resource fnSeeder 'Microsoft.Web/sites@2021-01-15' = {
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strSeeder.listKeys().keys[0].value}'
-        }        
+        }
         {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strSeeder.listKeys().keys[0].value}'
-        }                            
+          name: 'WEBSITE_CONTENTSHARE'
+          value: 'seederapp092'
+        }                
       ]
     }
   }

@@ -1,8 +1,6 @@
 ﻿const df = require("durable-functions");
 const { v4: uuidv4 } = require('uuid');
 
-//const _blobServiceClient = new BlobServiceClient();
-
 module.exports = df.orchestrator(function* (context) {
     const outputs = {};
 
