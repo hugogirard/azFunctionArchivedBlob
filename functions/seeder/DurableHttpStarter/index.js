@@ -4,7 +4,7 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 module.exports = async function (context, req) {
 
     try {
-        const cnxString = process.env['AzureWebJobsStorage'];
+        const cnxString = process.env['DocumentStorage'];
     
         context.log.info(`Body payload parameters: ${context.rawBody}`);
 

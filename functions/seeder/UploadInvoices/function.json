@@ -10,7 +10,7 @@
       "type": "blob",
       "path": "{containerName}/{filename}",
       "direction": "out",
-      "connection": "AzureWebJobsStorage"
+      "connection": "DocumentStorage"
     }    
   ]
 }

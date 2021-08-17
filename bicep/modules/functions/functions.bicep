@@ -1,5 +1,7 @@
 param location string
 param suffix string
+param strDocumentKey string
+param strDocumentName string
 
 var seederFunctionAppName = 'fnc-seeder-${suffix}'
 var hostingPlanName = 'plan-seeder-${suffix}'
@@ -54,6 +56,10 @@ resource fnSeeder 'Microsoft.Web/sites@2021-01-15' = {
           name: 'AzureWebJobsStorage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strSeeder.listKeys().keys[0].value}'
         }
+        {
+          name: 'DocumentStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${strDocumentName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strDocumentKey}'
+        }        
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${strSeeder.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strSeeder.listKeys().keys[0].value}'
