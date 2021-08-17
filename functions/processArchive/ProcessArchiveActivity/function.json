@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "name": "name",
+      "type": "activityTrigger",
+      "direction": "in"
+    },
+    {
+      "name": "markerEntity",
+      "type": "table",
+      "tableName": "Cursor",
+      "partitionKey": "Date",
+      "rowKey": "{rowKey}",
+      "connection": "StorageProcess",
+      "direction": "in"
+    }
+  ]
+}

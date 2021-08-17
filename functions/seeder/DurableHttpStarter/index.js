@@ -27,7 +27,7 @@ module.exports = async function (context, req) {
         
         const containerResponse = await containerClient.createIfNotExists();
         
-        if (!containerResponse.succeededn && containerResponse.errorCode != 'ContainerAlreadyExists'){
+        if (!containerResponse.succeeded && containerResponse.errorCode != 'ContainerAlreadyExists'){
             context.log.error(`Cannot create container ${containerName}`);
             throw new Exception('Cannot create container');
         }
