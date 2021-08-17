@@ -27,6 +27,7 @@ resource fnSeeder 'Microsoft.Web/sites@2021-01-15' = {
   location: location
   kind: 'funtionapp'
   properties: {
+    serverFarmId: sdHosting.id
     siteConfig: {
       appSettings: [
         {
