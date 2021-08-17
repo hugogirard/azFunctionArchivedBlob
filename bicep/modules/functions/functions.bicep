@@ -42,10 +42,6 @@ resource fnSeeder 'Microsoft.Web/sites@2021-01-15' = {
         {
           name: 'WEBSITE_NODE_DEFAULT_VERSION'
           value: '~14'
-        }      
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: '~14'
         }                             
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
