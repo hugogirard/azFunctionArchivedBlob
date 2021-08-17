@@ -16,8 +16,6 @@ resource strSeeder 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 resource sdHosting 'Microsoft.Web/serverfarms@2021-01-15' = {
   name: hostingPlanName
   location: location
-  properties: {
-  }
   sku: {
     tier: 'Dynamic'
     name: 'Y1'
