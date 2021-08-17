@@ -15,6 +15,8 @@ module function 'modules/functions/functions.bicep' = {
   params: {
     location: location
     suffix: suffix
+    strDocumentKey: str.outputs.strKey
+    strDocumentName: str.outputs.storageName
   }
 }
 
