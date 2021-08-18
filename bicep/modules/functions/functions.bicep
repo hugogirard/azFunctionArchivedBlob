@@ -67,6 +67,10 @@ resource fnSeeder 'Microsoft.Web/sites@2018-11-01' = {
         {
           name: 'WEBSITE_CONTENTSHARE'
           value: 'seederapp092'
+        }
+        {
+          name: 'FACTOR'
+          value: '1000'
         }                
       ]
     }
