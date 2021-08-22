@@ -1,11 +1,15 @@
 ﻿const df = require("durable-functions");
 const { v4: uuidv4 } = require('uuid');
+const moment = require('moment');
 
 module.exports = df.orchestrator(function* (context) {
+    
     const outputs = {
         totalSuccessDocument: 0,
         totalErrorDocument: 0,
-        totalDocumentProcess: 0
+        totalDocumentProcess: 0,
+        startedTime: moment.utc(new Date()).format(),
+        endedTime: 0
     };
 
     const payload = context.df.getInput();
@@ -42,6 +46,8 @@ module.exports = df.orchestrator(function* (context) {
     
     outputs.totalDocumentProcess = payload.nbrDocuments;
 
+    outputs.endedTime = moment.utc(new Date()).format();
+
     return outputs;
 });
 
@@ -65,3 +71,7 @@ function startActivities(factor,context,containerName){
     }     
     return tasks;
 }
+
+
+
+

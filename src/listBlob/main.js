@@ -1,13 +1,42 @@
 const { ContainerClient  } = require('@azure/storage-blob');
 const fs = require('fs').promises;
-
 require('dotenv').config();
 
 async function main() {
 
+    try {
+        await withPages();
+        //await withIterator();
+
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+async function withPages(){
+
     const strCnxString = process.env.CONNECTION_STRING;
     const containerName = process.env.CONTAINER_NAME || "";
+
+    const containerClient = new ContainerClient(strCnxString,containerName);    
+    let iterator = await containerClient.listBlobsFlat().byPage();
+    let response = await iterator.next();
+    if (response.done()){
         
+    }
+    //for await (const response of containerClient.listBlobsFlat().byPage({ maxPageSize: 20 })) {
+        for (const blob of response.segment.blobItems) {
+          console.log(`Blob ${i++}: ${blob.name}`);
+        }
+      //}
+    
+}
+
+async function withIterator() {
+
+    const strCnxString = process.env.CONNECTION_STRING;
+    const containerName = process.env.CONTAINER_NAME || "";
+
     const containerClient = new ContainerClient(strCnxString,containerName);
     
     const fileName = './pointer.txt';
@@ -41,6 +70,7 @@ async function main() {
     marker = response.value.continuationToken;
     await fs.writeFile(fileName,marker);
 }
+
 
 main().catch((err) => {
     console.error("Error running main:",err.message);

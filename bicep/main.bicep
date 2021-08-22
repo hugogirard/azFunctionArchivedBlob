@@ -20,4 +20,12 @@ module function 'modules/functions/functions.bicep' = {
   }
 }
 
+module bus 'modules/bus/servicebus.bicep' = {
+  name: 'bus'
+  params: {
+    location: location
+    suffix: suffix
+  }
+}
+
 output functionSeederName string = function.outputs.functionSeederName
