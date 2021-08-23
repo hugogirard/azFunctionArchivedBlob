@@ -28,4 +28,12 @@ module bus 'modules/bus/servicebus.bicep' = {
   }
 }
 
+module form 'modules/cognitives/form.bicep' = {
+  name: 'form'
+  params: {
+    location: location
+    suffix: suffix
+  }
+}
+
 output functionSeederName string = function.outputs.functionSeederName
