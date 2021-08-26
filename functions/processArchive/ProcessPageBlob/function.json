@@ -4,6 +4,22 @@
       "name": "inputs",
       "type": "activityTrigger",
       "direction": "in"
+    },
+    {
+      "name": "outputSbQueue",
+      "type": "serviceBus",
+      "queueName": "processedfiles",
+      "connection": "SrvBusCnxString",
+      "direction": "out"
+    },
+    {
+      "name": "processTracking",
+      "type": "cosmosDB",
+      "databaseName": "archiving",
+      "collectionName": "tracking",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDBCnxString",
+      "direction": "out"
     }
   ]
 }

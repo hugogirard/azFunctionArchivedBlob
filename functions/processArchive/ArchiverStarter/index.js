@@ -7,7 +7,6 @@ module.exports = async function (context, req) {
         throw new Error('Invalid inputs parameters');
     }
         
-
     const client = df.getClient(context);
 
     const instanceId = await client.startNew('ArchiverOrchestrator',undefined,req.body);

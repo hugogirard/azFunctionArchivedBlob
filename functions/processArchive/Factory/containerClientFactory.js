@@ -1,3 +1,4 @@
+// Create static client of storage
 const { BlobServiceClient } = require('@azure/storage-blob');
 const strCnxString = process.env.STORAGE_DOCUMENT_CNXSTRING || "";
 const blobServiceClient = BlobServiceClient.fromConnectionString(strCnxString);

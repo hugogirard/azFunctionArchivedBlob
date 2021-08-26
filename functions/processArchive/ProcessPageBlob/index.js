@@ -1,31 +1,45 @@
 ﻿const ContainerClient = require('../Factory/containerClientFactory');
 const storageCopy = require('./storageCopy');
+const IndexService = require('./indexService');
 
 module.exports = async function (context) {
     
     const sourceContainerClient = ContainerClient(context.bindings.inputs.rootFolder);
     const destContainerClient = ContainerClient(context.bindings.inputs.destinationContainer);
     const deadLetterFolder = ContainerClient(context.bindings.inputs.deadLetterFolder);
+    const indexService = new IndexService(sourceContainerClient);
+
     const outputs = {
+        id: context.bindingData.instanceId,
         nbrProcessed: 0,
-        nbrErrors: 0
+        nbrErrors: 0,
+        rootFolder: context.bindings.inputs.rootFolder,
+        startTime: new Date(new Date().toUTCString()),
+        endTime: null
     };
-    //context.bindings.outputSbQueue = [];
+    context.bindings.outputSbQueue = [];
     try {        
         // Process one page at the time
         for await (const response of sourceContainerClient.listBlobsFlat().byPage()) {
             outputs.nbrProcessed = response.segment.blobItems.length;
             for (const blob of response.segment.blobItems) {            
                 try {
+                    let blobClient = sourceContainerClient.getBlobClient(blob.name);
+                    let blobEntity = {
+                        name: blobClient.name,
+                        url: blobClient.url
+                    }
 
-                    let resultCopy = await storageCopy(blob,destContainerClient);
+                    await indexService.setTags();
+
+                    let resultCopy = await storageCopy(blobEntity,destContainerClient);
                     let cannotProcessDocument = false;
 
                     if (resultCopy.statusCode === 202){
                         outputs.nbrProcessed += 1;
-                        //context.bindings.outputSbQueue.push(urlBlob);
+                        context.bindings.outputSbQueue.push(blobEntity.url);
                     } else if (resultCopy.error === null) {
-                        resultCopy = await storageCopy(blob,deadLetterFolder);
+                        resultCopy = await storageCopy(blobEntity,deadLetterFolder);
                         if (resultCopy != 202)
                             cannotProcessDocument = true;                        
                     } else {
@@ -47,6 +61,11 @@ module.exports = async function (context) {
         context.log.error(error.message);
     }
 
-    return outputs;
+    outputs.endTime = new Date(new Date().toUTCString());
+    context.bindings.processTracking = JSON.stringify(outputs);
+
+    return obj = {
+        nbrProcessed: outputs.nbrProcessed
+    };
 
 };

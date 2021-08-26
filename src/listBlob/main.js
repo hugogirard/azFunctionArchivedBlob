@@ -1,5 +1,4 @@
 const { ContainerClient  } = require('@azure/storage-blob');
-const fs = require('fs').promises;
 require('dotenv').config();
 
 async function main() {
@@ -17,60 +16,26 @@ async function withPages(){
 
     const strCnxString = process.env.CONNECTION_STRING;
     const containerName = process.env.CONTAINER_NAME || "";
-
+    const blobName = "00026d41-1bed-43de-8c92-0307d940d5b7.pdf";
     const containerClient = new ContainerClient(strCnxString,containerName);    
-    let iterator = await containerClient.listBlobsFlat().byPage();
-    let response = await iterator.next();
-    if (response.done()){
-        
-    }
-    //for await (const response of containerClient.listBlobsFlat().byPage({ maxPageSize: 20 })) {
-        for (const blob of response.segment.blobItems) {
-          console.log(`Blob ${i++}: ${blob.name}`);
-        }
-      //}
+
+    const blobClient = containerClient.getBlobClient(blobName);
+
+    const tagResponse = await blobClient.getTags();
     
-}
-
-async function withIterator() {
-
-    const strCnxString = process.env.CONNECTION_STRING;
-    const containerName = process.env.CONTAINER_NAME || "";
-
-    const containerClient = new ContainerClient(strCnxString,containerName);
+    if (tagResponse._response.status === 200 && !tagResponse.tags.hasOwnProperty('processed')) {
+        const tags = {
+            'processed': 'true'
+        };
     
-    const fileName = './pointer.txt';
-    let marker = null;
-
-    try {
-        marker = await fs.readFile(fileName,'utf8');
-    } catch { // if the file doesn't exist we don't care
-        
-    }
-
-    // if (fs.existsSync(fileName)){
-    //     marker = await fs.readFile(fileName,'utf8');
-    // }
-
-    let iterator = null;
+        const response = await blobClient.setTags(tags);
     
-    if (!marker){
-        iterator = containerClient.listBlobsFlat().byPage({ maxPageSize: 1 });
-    } else {
-        iterator = containerClient.listBlobsFlat().byPage({ continuationToken: marker, maxPageSize: 1 });
-    }
-
-
-    let response = await iterator.next();
-    if (!response.done) {
-        for (const blob of response.value.segment.blobItems) {
-            console.log(`${blob.name}`);            
+        // Do something
+        if (!response._response.status === 204) {
+    
         }
     }
-    marker = response.value.continuationToken;
-    await fs.writeFile(fileName,marker);
 }
-
 
 main().catch((err) => {
     console.error("Error running main:",err.message);

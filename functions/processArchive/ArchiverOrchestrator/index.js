@@ -17,6 +17,6 @@ module.exports = df.orchestrator(function* (context) {
     }
 
     // Continue processing documents
-    yield context.df.continueAsNew();
+    yield context.df.continueAsNew(payload);
 
 });
