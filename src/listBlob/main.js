@@ -1,22 +1,37 @@
-const { ContainerClient  } = require('@azure/storage-blob');
+const { ContainerClient, BlobServiceClient, StorageSharedKeyCredential  } = require('@azure/storage-blob');
 require('dotenv').config();
 
 async function main() {
 
     try {
-        await withPages();
-        //await withIterator();
-
+        await queryAsync();
+        //await tagBlobs();
+        
     } catch (error) {
         console.error(error.message);
     }
 }
 
-async function withPages(){
+async function queryAsync() {
+    const query = `"processed" = 'true'`;
+    const account = process.env.STR_ACCOUNT_NAME;
+
+    const sharedKeyCredential = new StorageSharedKeyCredential(account, process.env.ACCOUNT_KEY);
+    const blobServiceClient = new BlobServiceClient(
+        `https://${account}.blob.core.windows.net`,
+        sharedKeyCredential
+      );
+
+    for await (const taggedBlobItem of blobServiceClient.findBlobsByTags(query)) {
+        console.log(taggedBlobItem);
+    }
+}
+
+async function tagBlobs(){
 
     const strCnxString = process.env.CONNECTION_STRING;
     const containerName = process.env.CONTAINER_NAME || "";
-    const blobName = "00026d41-1bed-43de-8c92-0307d940d5b7.pdf";
+    const blobName = "001c2429-e208-48ea-acb1-e43c7d9615b4.pdf";
     const containerClient = new ContainerClient(strCnxString,containerName);    
 
     const blobClient = containerClient.getBlobClient(blobName);
