@@ -25,4 +25,4 @@ resource queueSender 'Microsoft.ServiceBus/namespaces/queues/authorizationRules@
   }
 }
 
-output sasKey string = queueSender.listKeys().keys[0].value
+
