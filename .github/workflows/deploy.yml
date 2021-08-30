@@ -2,8 +2,8 @@ name: Deploy Azure Function Sample
 
 on:
  push:
-   paths-ignore:
-     - 'bicep/destroy.yml'
+   paths-ignore:    
+     - '.github/workflows/destroy.yml'
      
  workflow_dispatch:
 
