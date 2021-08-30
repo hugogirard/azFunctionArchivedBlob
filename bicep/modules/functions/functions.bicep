@@ -18,7 +18,7 @@ resource strSeeder 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 resource strProcessor 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: 'strprocessor${suffix}'
+  name: 'strproc${suffix}'
   location: location
   kind: 'StorageV2'
   sku: {
