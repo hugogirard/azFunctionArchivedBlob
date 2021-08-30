@@ -5,7 +5,9 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(strCnxString);
 let containerClients = [];
 const instanceService = (containerName) => {
     let instance = containerClients.find(e => e.name === containerName);
-    if (!instance) {
+    if (instance) {
+        instance = instance.client;
+    } else {        
         instance = blobServiceClient.getContainerClient(containerName);
         containerClients.push({
             name: containerName,

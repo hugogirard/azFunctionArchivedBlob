@@ -1,14 +1,14 @@
 ﻿const ContainerClient = require('../Factory/containerClientFactory');
 const storageCopy = require('./storageCopy');
 const IndexService = require('./indexService');
+const indexService = new IndexService();
 
 module.exports = async function (context) {
     
     const sourceContainerClient = ContainerClient(context.bindings.inputs.rootFolder);
     const destContainerClient = ContainerClient(context.bindings.inputs.destinationContainer);
     const deadLetterFolder = ContainerClient(context.bindings.inputs.deadLetterFolder);
-    const indexService = new IndexService(sourceContainerClient);
-
+    
     const outputs = {
         id: context.bindingData.instanceId,
         nbrProcessed: 0,
@@ -29,8 +29,14 @@ module.exports = async function (context) {
                         name: blobClient.name,
                         url: blobClient.url
                     }
+                    
+                    const success = await indexService.setTags(context.bindings.inputs.rootFolder,
+                                                               blobEntity.name,
+                                                               context.log);
 
-                    await indexService.setTags();
+                    if (!success) {
+                        cannotProcessDocument = true;
+                    }
 
                     let resultCopy = await storageCopy(blobEntity,destContainerClient);
                     let cannotProcessDocument = false;
