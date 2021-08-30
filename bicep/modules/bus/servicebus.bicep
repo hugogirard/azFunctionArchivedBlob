@@ -15,3 +15,14 @@ resource serviceBusQueue 'Microsoft.ServiceBus/namespaces/queues@2017-04-01' = {
     maxDeliveryCount: 3
   }
 }
+
+resource queueSender 'Microsoft.ServiceBus/namespaces/queues/authorizationRules@2021-01-01-preview' = {
+  name: '${serviceBusNamespace.name}/${serviceBusQueue.name}/funcSender'
+  properties: {
+    rights: [
+      'Send'
+    ]
+  }
+}
+
+output sasKey string = queueSender.listKeys().keys[0].value

@@ -130,6 +130,26 @@ resource fnPRocessor 'Microsoft.Web/sites@2018-11-01' = {
           value: 'DefaultEndpointsProtocol=https;AccountName=${strProcessor.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strProcessor.listKeys().keys[0].value}'
         }
         {
+          name: 'STORAGE_DOCUMENT_CNXSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${strDocumentName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${strDocumentKey}'
+        }            
+        {
+          name: 'SrvBusCnxString'
+          value: ''
+        }
+        {
+          name: 'CosmosDBCnxString'
+          value: ''
+        }
+        {
+          name: 'STR_ACCOUNT_NAME'
+          value: strProcessor.name
+        }
+        {
+          name: 'ACCOUNT_KEY'
+          value: strProcessor.listKeys().keys[0].value
+        }
+        {
           name: 'WEBSITE_CONTENTSHARE'
           value: 'processorapp092'
         }               
