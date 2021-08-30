@@ -3,7 +3,7 @@ param suffix string
 
 var databaseName = 'archiving'
 
-resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2020-04-15' = {
+resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
   name: 'cosmosdb-${suffix}'
   location: location
   properties: {
@@ -17,7 +17,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2020-04-15' = {
   }
 }
 
-resource cosmosdb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2020-04-01' = {
+resource cosmosdb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2021-04-15' = {
   name: '${cosmos.name}/${databaseName}'
   properties: {
     resource: {
