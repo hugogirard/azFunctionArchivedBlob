@@ -1,7 +1,7 @@
 name: Destroy Azure Resource
 
 env:
-  RESOURCE_GROUP_NAME: 'azure-funtion-blob'
+  RESOURCE_GROUP_NAME: 'azure-function-blob'
 
 on:
   workflow_dispatch:
