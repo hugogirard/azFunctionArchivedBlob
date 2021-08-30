@@ -28,8 +28,8 @@ module bus 'modules/bus/servicebus.bicep' = {
   }
 }
 
-module form 'modules/cognitives/form.bicep' = {
-  name: 'form'
+module cosmos 'modules/cosmos/cosmos.bicep' = {
+  name: 'cosmos'
   params: {
     location: location
     suffix: suffix
