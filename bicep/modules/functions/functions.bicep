@@ -98,7 +98,7 @@ resource fnPRocessor 'Microsoft.Web/sites@2018-11-01' = {
   location: location
   kind: 'functionapp'
   properties: {
-    serverFarmId: sdHostingSeeder.id
+    serverFarmId: sdHostingProcessor.id
     siteConfig: {
       appSettings: [
         {
